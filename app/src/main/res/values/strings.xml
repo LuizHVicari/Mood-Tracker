@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Mood Tracker</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email_example">email@example.com</string>
+    <string name="email">E-mail</string>
+    <string name="name_placeholder">John doe</string>
+    <string name="name">Name</string>
+    <string name="app_title_word_1">Mood</string>
+    <string name="app_title_word_2">Tracker</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="show_password">show password</string>
+    <string name="hide_password">hide password</string>
+    <string name="should_be_a_valid_e_mail">Should be a valid e-mail</string>
+    <string name="passwords_should_match">Passwords should match</string>
+</resources>
