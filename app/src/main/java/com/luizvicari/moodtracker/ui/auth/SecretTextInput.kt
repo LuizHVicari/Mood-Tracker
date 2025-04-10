@@ -42,7 +42,7 @@ fun SecretTextInput(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Next
         ),
-        visualTransformation = if (show) {
+        visualTransformation = if (!show) {
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None

@@ -4,7 +4,7 @@ import com.luizvicari.moodtracker.data.model.AuthState
 import com.luizvicari.moodtracker.data.model.User
 import kotlinx.coroutines.flow.Flow
 
-class AuthRepositoryImpl :  AuthRepository {
+class MockAuthRepository: AuthRepository {
     override val currentUser: Flow<User?>
         get() = TODO("Not yet implemented")
 

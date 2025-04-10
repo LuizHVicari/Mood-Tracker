@@ -2,6 +2,8 @@ package com.luizvicari.moodtracker.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.luizvicari.moodtracker.data.model.AuthState
+import com.luizvicari.moodtracker.data.repository.AuthRepository
 import com.luizvicari.moodtracker.util.validators.isStrongPassword
 import io.konform.validation.Validation
 import io.konform.validation.ValidationResult
@@ -13,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(private val authRepository: AuthRepository) : ViewModel() {
     data class SignUpFormState(
         val email: String = "",
         val displayName: String = "",
@@ -26,7 +28,8 @@ class SignUpViewModel : ViewModel() {
         val emailError: String? = null,
         val displayNameError: String? = null,
         val passwordError: String? = null,
-        val confirmPasswordError: String? = null
+        val confirmPasswordError: String? = null,
+        val signUpSuccess: Boolean = false,
     )
 
     private val _uiState = MutableStateFlow(SignUpFormState())
@@ -85,6 +88,7 @@ class SignUpViewModel : ViewModel() {
     }
 
     fun onSignUpClick() {
+        val currentState = _uiState.value
         if (!_uiState.value.isFormValid) {
             validateForm(showErrors = true)
             return
@@ -93,8 +97,28 @@ class SignUpViewModel : ViewModel() {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            kotlinx.coroutines.delay(1000)
-            _uiState.update { it.copy(isLoading = false) }
+            val result = authRepository.signUp(
+                email = currentState.email,
+                password = currentState.password,
+                displayName = currentState.displayName
+            )
+
+            when (result) {
+                is AuthState.Error -> _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        signUpSuccess = false
+                    )
+                }
+
+                AuthState.Loading -> _uiState.update { it.copy(isLoading = true) }
+                is AuthState.Success -> _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        signUpSuccess = true
+                    )
+                }
+            }
         }
     }
 

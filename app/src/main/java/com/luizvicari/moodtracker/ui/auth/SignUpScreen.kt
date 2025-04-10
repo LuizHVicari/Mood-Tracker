@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.luizvicari.moodtracker.R
+import com.luizvicari.moodtracker.data.repository.MockAuthRepository
 import com.luizvicari.moodtracker.ui.commom.AppTitle
 import com.luizvicari.moodtracker.ui.commom.DefaultButton
 import com.luizvicari.moodtracker.ui.commom.DefaultTextInput
@@ -30,9 +31,10 @@ import com.luizvicari.moodtracker.ui.theme.MoodTrackerTheme
 import com.luizvicari.moodtracker.util.validators.isStrongPassword
 import io.konform.validation.Validation
 import io.konform.validation.constraints.pattern
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier, viewModel: SignUpViewModel = viewModel(), onNavigateToSignIn: () -> Unit) {
+fun SignUpScreen(modifier: Modifier = Modifier, viewModel: SignUpViewModel = koinViewModel(), onNavigateToSignIn: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold { innerPadding ->
@@ -41,7 +43,7 @@ fun SignUpScreen(modifier: Modifier = Modifier, viewModel: SignUpViewModel = vie
                 .fillMaxSize()
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(2.dp, alignment = Alignment.CenterVertically)
         ) {
             AppTitle()
             DefaultTextInput(
@@ -99,7 +101,7 @@ fun SignUpScreen(modifier: Modifier = Modifier, viewModel: SignUpViewModel = vie
                 modifier = Modifier.width(
                     300.dp
                 ),
-                onChange = viewModel::onPasswordChanged,
+                onChange = viewModel::onConfirmPasswordChanged,
                 value = uiState.confirmPassword,
                 placeholder = stringResource(R.string.confirm_password),
                 show = uiState.showConfirmPassword,
@@ -134,6 +136,6 @@ fun SignUpScreen(modifier: Modifier = Modifier, viewModel: SignUpViewModel = vie
 @Composable
 fun SignUpScreenPreview(modifier: Modifier = Modifier) {
     MoodTrackerTheme {
-        SignUpScreen(onNavigateToSignIn = {})
+        SignUpScreen(onNavigateToSignIn = {}, viewModel = SignUpViewModel(MockAuthRepository()))
     }
 }
